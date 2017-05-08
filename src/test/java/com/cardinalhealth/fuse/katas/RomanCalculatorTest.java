@@ -17,4 +17,11 @@ public class RomanCalculatorTest {
     public void iExist() throws Exception {
         assertNotNull(subject);
     }
+
+    @Test
+    public void I_plus_I() throws Exception {
+        subject.enter("I");
+        subject.enter("I");
+        assertEquals("II", subject.add());
+    }
 }
