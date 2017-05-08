@@ -49,12 +49,14 @@ public class RomanCalculator {
 
     private String getRomanNumberValue(int totalDecimalValue) {
         StringBuilder result = new StringBuilder();
-        for(int x = 0; x < totalDecimalValue/5; x++) {
-            result.append(romanNumberMap.inverseBidiMap().get(5).toString());
-        }
-        for(int x = 0; x < totalDecimalValue%5; x++) {
-            result.append(romanNumberMap.inverseBidiMap().get(1).toString());
-        }
+        buildRomanNumber(result, totalDecimalValue/5, 5);
+        buildRomanNumber(result, totalDecimalValue%5, 1);
         return result.toString();
+    }
+
+    private void buildRomanNumber(StringBuilder result, int numberOfFives, int decimalNumberBeingProcessed) {
+        for (int x = 0; x < numberOfFives; x++) {
+            result.append(romanNumberMap.inverseBidiMap().get(decimalNumberBeingProcessed).toString());
+        }
     }
 }
