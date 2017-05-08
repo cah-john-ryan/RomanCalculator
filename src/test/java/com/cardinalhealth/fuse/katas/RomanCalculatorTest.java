@@ -24,10 +24,14 @@ public class RomanCalculatorTest {
         assertRomanCalculatorAddition("I", "I", "II");
     }
 
-
     @Test
     public void I_plus_II() throws Exception {
         assertRomanCalculatorAddition("I", "II", "III");
+    }
+
+    @Test
+    public void II_plus_III() throws Exception {
+        assertRomanCalculatorAddition("II", "III", "V");
     }
 
     private void assertRomanCalculatorAddition(String firstRomanNumber, String secondRomanNumber, String expectedRomanNumberResult) {
