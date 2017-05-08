@@ -3,7 +3,8 @@ package com.cardinalhealth.fuse.katas;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class RomanCalculatorTest {
     private RomanCalculator subject;
@@ -20,8 +21,12 @@ public class RomanCalculatorTest {
 
     @Test
     public void I_plus_I() throws Exception {
-        subject.enter("I");
-        subject.enter("I");
-        assertEquals("II", subject.add());
+        assertRomanCalculatorAddition("I", "I", "II");
+    }
+
+    private void assertRomanCalculatorAddition(String firstRomanNumber, String secondRomanNumber, String expectedRomanNumberResult) {
+        subject.enter(firstRomanNumber);
+        subject.enter(secondRomanNumber);
+        assertEquals(expectedRomanNumberResult, subject.add());
     }
 }
