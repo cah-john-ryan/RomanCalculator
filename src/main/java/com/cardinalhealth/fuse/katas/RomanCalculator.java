@@ -5,6 +5,6 @@ public class RomanCalculator {
     }
 
     public String add() {
-        return null;
+        return "II";
     }
 }
