@@ -24,6 +24,12 @@ public class RomanCalculatorTest {
         assertRomanCalculatorAddition("I", "I", "II");
     }
 
+
+    @Test
+    public void I_plus_II() throws Exception {
+        assertRomanCalculatorAddition("I", "II", "III");
+    }
+
     private void assertRomanCalculatorAddition(String firstRomanNumber, String secondRomanNumber, String expectedRomanNumberResult) {
         subject.enter(firstRomanNumber);
         subject.enter(secondRomanNumber);
