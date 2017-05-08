@@ -20,6 +20,7 @@ public class RomanCalculator {
         romanNumberMap = new DualHashBidiMap( );
         romanNumberMap.put('I', 1);
         romanNumberMap.put('V', 5);
+        romanNumberMap.put('X', 10);
     }
 
     public void enter(String romanNumberEntered) {
@@ -49,8 +50,12 @@ public class RomanCalculator {
 
     private String getRomanNumberValue(int totalDecimalValue) {
         StringBuilder result = new StringBuilder();
-        buildRomanNumber(result, totalDecimalValue/5, 5);
-        buildRomanNumber(result, totalDecimalValue%5, 1);
+        int totalDecimalValueRemaining = totalDecimalValue;
+        buildRomanNumber(result, totalDecimalValueRemaining / 10, 10);
+        totalDecimalValueRemaining = totalDecimalValueRemaining % 10;
+        buildRomanNumber(result, totalDecimalValueRemaining / 5, 5);
+        totalDecimalValueRemaining = totalDecimalValueRemaining % 5;
+        buildRomanNumber(result, totalDecimalValueRemaining, 1);
         return result.toString();
     }
 
