@@ -23,13 +23,13 @@ public class RomanCalculator {
         romanNumberToBase10Map.put('L', 50);
     }
 
-
     public void enter(String romanNumberEntered) {
         romanNumbersEntered.add(romanNumberEntered);
     }
 
     public String add() {
         int totalDecimalValue = getDecimalValueByAddition();
+        romanNumbersEntered.clear();
         return getRomanNumberValue(totalDecimalValue);
     }
 

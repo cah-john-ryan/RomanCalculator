@@ -20,53 +20,22 @@ public class RomanCalculatorTest {
     }
 
     @Test
-    public void I_plus_I() throws Exception {
+    public void theBasicsOfSteppingUp() throws Exception {
         assertRomanCalculatorAddition("I", "I", "II");
-    }
-
-    @Test
-    public void I_plus_II() throws Exception {
         assertRomanCalculatorAddition("I", "II", "III");
-    }
-
-    @Test
-    public void II_plus_III() throws Exception {
         assertRomanCalculatorAddition("II", "III", "V");
-    }
-
-    @Test
-    public void II_plus_V() throws Exception {
         assertRomanCalculatorAddition("II", "V", "VII");
-    }
-
-    @Test
-    public void III_plus_III() throws Exception {
         assertRomanCalculatorAddition("III", "III", "VI");
-    }
-
-    @Test
-    public void V_plus_V() throws Exception {
         assertRomanCalculatorAddition("V", "V", "X");
-    }
-
-    @Test
-    public void X_plus_X() throws Exception {
         assertRomanCalculatorAddition("X", "X", "XX");
-    }
-
-    @Test
-    public void XV_plus_X() throws Exception {
         assertRomanCalculatorAddition("XV", "X", "XXV");
-    }
-
-    @Test
-    public void XX_plus_XXX() throws Exception {
         assertRomanCalculatorAddition("XX", "XXX", "L");
     }
 
     private void assertRomanCalculatorAddition(String firstRomanNumber, String secondRomanNumber, String expectedRomanNumberResult) {
         subject.enter(firstRomanNumber);
         subject.enter(secondRomanNumber);
-        assertEquals(expectedRomanNumberResult, subject.add());
+        String message = String.format("Test of %1$s + %2$s", firstRomanNumber, secondRomanNumber);
+        assertEquals(message, expectedRomanNumberResult, subject.add());
     }
 }
