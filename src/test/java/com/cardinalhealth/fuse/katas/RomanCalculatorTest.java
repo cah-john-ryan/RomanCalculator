@@ -35,6 +35,9 @@ public class RomanCalculatorTest {
     @Test
     public void lesserBeforeBiggerEntered() throws Exception {
         assertRomanCalculatorAddition("IV", "IV", "VIII");
+        assertRomanCalculatorAddition("XL", "X", "L");
+        assertRomanCalculatorAddition("XXIV", "I", "XXV");
+        assertRomanCalculatorAddition("XLIV", "VI", "L");
     }
 
     private void assertRomanCalculatorAddition(String firstRomanNumber, String secondRomanNumber, String expectedRomanNumberResult) {
