@@ -43,8 +43,15 @@ public class RomanCalculator {
 
     private int getDecimalValue(String romanNumberEntered) {
         int totalValue = 0;
-        for (int x = 0; x < romanNumberEntered.length(); x++) {
-            totalValue += romanNumberToBase10Map.get(romanNumberEntered.charAt(x));
+        Integer previousValue = null;
+        for (int x = romanNumberEntered.length() - 1; x >= 0; x--) {
+            int currentValue = romanNumberToBase10Map.get(romanNumberEntered.charAt(x));
+            if (previousValue == null || currentValue >= previousValue) {
+                totalValue += currentValue;
+            } else {
+                totalValue -= currentValue;
+            }
+            previousValue = currentValue;
         }
         return totalValue;
     }
@@ -63,15 +70,6 @@ public class RomanCalculator {
         Character romanCharacterBeingUsed = findRomanNumberFromBase10Value(base10ValueBeingProcessed);
         buildRomanNumber(result, remainingTotal / base10ValueBeingProcessed, romanCharacterBeingUsed);
         return remainingTotal % base10ValueBeingProcessed;
-    }
-
-    private void buildTheRunt(StringBuilder result, Character romanCharacterBeingUsed) {
-        result.append('I');
-        result.append(romanCharacterBeingUsed);
-    }
-
-    private boolean isShortByOne(int base10ValueBeingProcessed, int remainingTotal) {
-        return remainingTotal == base10ValueBeingProcessed - 1;
     }
 
     private void buildRomanNumber(StringBuilder result, int howManyToAppend, Character romanCharacterBeingUsed) {
