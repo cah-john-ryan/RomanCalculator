@@ -11,12 +11,10 @@ import java.util.Map;
 public class RomanCalculator {
     List<String> romanNumbersEntered;
     BidiMap<Character, Integer> romanNumberToBase10Map;
-    Map<Character, Character> parentRomanNumberMap;
 
     public RomanCalculator() {
         romanNumbersEntered = new ArrayList<>();
         setupRomanNumberHashMap();
-        setupParentRomanNumberMap();
     }
 
     private void setupRomanNumberHashMap() {
@@ -27,12 +25,6 @@ public class RomanCalculator {
         romanNumberToBase10Map.put('L', 50);
     }
 
-    private void setupParentRomanNumberMap() {
-        parentRomanNumberMap = new HashMap<>();
-        parentRomanNumberMap.put('I', 'V');
-        parentRomanNumberMap.put('V', 'X');
-        parentRomanNumberMap.put('X', 'L');
-    }
 
     public void enter(String romanNumberEntered) {
         romanNumbersEntered.add(romanNumberEntered);
@@ -65,36 +57,37 @@ public class RomanCalculator {
         remainingValue = buildRomanNumberAndDecrementRemainingValue(result, 50, remainingValue);
         remainingValue = buildRomanNumberAndDecrementRemainingValue(result, 10, remainingValue);
         remainingValue = buildRomanNumberAndDecrementRemainingValue(result, 5, remainingValue);
-        buildRomanNumber(result, remainingValue, 1);
+        buildRomanNumber(result, remainingValue, 'I');
         return result.toString();
     }
 
     private int buildRomanNumberAndDecrementRemainingValue(StringBuilder result, int base10ValueBeingProcessed, int remainingTotal) {
-        buildRomanNumber(result, remainingTotal / base10ValueBeingProcessed, base10ValueBeingProcessed);
+        Character romanCharacterBeingUsed = findRomanNumberFromBase10Value(base10ValueBeingProcessed);
+        if (isShortByOne(base10ValueBeingProcessed, remainingTotal)) {
+            buildTheRunt(result, romanCharacterBeingUsed);
+            return 0;
+        } else {
+            buildRomanNumber(result, remainingTotal / base10ValueBeingProcessed, romanCharacterBeingUsed);
+        }
         return remainingTotal % base10ValueBeingProcessed;
     }
 
-    private void buildRomanNumber(StringBuilder result, int howManyToAppend, int base10ValueBeingProcessed) {
-        Character romanCharacterBeingUsed = findRomanNumberFromBase10Value(base10ValueBeingProcessed);
-        if (howManyToAppend == 4) {
-            moveItOnUp(result, romanCharacterBeingUsed);
-        } else {
-            appendRomanCharacterRepeatedly(result, howManyToAppend, romanCharacterBeingUsed);
-        }
+    private void buildTheRunt(StringBuilder result, Character romanCharacterBeingUsed) {
+        result.append('I');
+        result.append(romanCharacterBeingUsed);
+    }
+
+    private boolean isShortByOne(int base10ValueBeingProcessed, int remainingTotal) {
+        return remainingTotal == base10ValueBeingProcessed - 1;
+    }
+
+    private void buildRomanNumber(StringBuilder result, int howManyToAppend, Character romanCharacterBeingUsed) {
+
+        appendRomanCharacterRepeatedly(result, howManyToAppend, romanCharacterBeingUsed);
     }
 
     private Character findRomanNumberFromBase10Value(int base10ValueBeingProcessed) {
         return romanNumberToBase10Map.inverseBidiMap().get(base10ValueBeingProcessed);
-    }
-
-    private void moveItOnUp(StringBuilder result, Character romanCharacterBeingUsed) {
-        result.append(romanCharacterBeingUsed);
-        Character parentRomanNumber = findParentRomanNumber(romanCharacterBeingUsed);
-        result.append(parentRomanNumber.toString());
-    }
-
-    private Character findParentRomanNumber(Character romanCharacterBeingUsed) {
-        return parentRomanNumberMap.get(romanCharacterBeingUsed);
     }
 
     private void appendRomanCharacterRepeatedly(StringBuilder result, int howManyToAppend, Character romanCharacterBeingUsed) {
