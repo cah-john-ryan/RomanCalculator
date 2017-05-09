@@ -4,23 +4,34 @@ import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RomanCalculator {
     List<String> romanNumbersEntered;
     BidiMap<Character, Integer> romanNumberToBase10Map;
+    Map<Character, Character> parentRomanNumberMap;
 
     public RomanCalculator() {
         romanNumbersEntered = new ArrayList<>();
         setupRomanNumberHashMap();
+        setupParentRomanNumberMap();
     }
 
     private void setupRomanNumberHashMap() {
-        romanNumberToBase10Map = new DualHashBidiMap( );
+        romanNumberToBase10Map = new DualHashBidiMap();
         romanNumberToBase10Map.put('I', 1);
         romanNumberToBase10Map.put('V', 5);
         romanNumberToBase10Map.put('X', 10);
         romanNumberToBase10Map.put('L', 50);
+    }
+
+    private void setupParentRomanNumberMap() {
+        parentRomanNumberMap = new HashMap<>();
+        parentRomanNumberMap.put('I', 'V');
+        parentRomanNumberMap.put('V', 'X');
+        parentRomanNumberMap.put('X', 'L');
     }
 
     public void enter(String romanNumberEntered) {
@@ -63,9 +74,32 @@ public class RomanCalculator {
         return remainingTotal % base10ValueBeingProcessed;
     }
 
-    private void buildRomanNumber(StringBuilder result, int numberOfFives, int base10ValueBeingProcessed) {
-        for (int x = 0; x < numberOfFives; x++) {
-            result.append(romanNumberToBase10Map.inverseBidiMap().get(base10ValueBeingProcessed).toString());
+    private void buildRomanNumber(StringBuilder result, int howManyToAppend, int base10ValueBeingProcessed) {
+        Character romanCharacterBeingUsed = findRomanNumberFromBase10Value(base10ValueBeingProcessed);
+        if (howManyToAppend == 4) {
+            moveItOnUp(result, romanCharacterBeingUsed);
+        } else {
+            appendRomanCharacterRepeatedly(result, howManyToAppend, romanCharacterBeingUsed);
+        }
+    }
+
+    private Character findRomanNumberFromBase10Value(int base10ValueBeingProcessed) {
+        return romanNumberToBase10Map.inverseBidiMap().get(base10ValueBeingProcessed);
+    }
+
+    private void moveItOnUp(StringBuilder result, Character romanCharacterBeingUsed) {
+        result.append(romanCharacterBeingUsed);
+        Character parentRomanNumber = findParentRomanNumber(romanCharacterBeingUsed);
+        result.append(parentRomanNumber.toString());
+    }
+
+    private Character findParentRomanNumber(Character romanCharacterBeingUsed) {
+        return parentRomanNumberMap.get(romanCharacterBeingUsed);
+    }
+
+    private void appendRomanCharacterRepeatedly(StringBuilder result, int howManyToAppend, Character romanCharacterBeingUsed) {
+        for (int x = 0; x < howManyToAppend; x++) {
+            result.append(romanCharacterBeingUsed);
         }
     }
 }
