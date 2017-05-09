@@ -4,9 +4,7 @@ import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class RomanCalculator {
     List<String> romanNumbersEntered;
@@ -63,12 +61,7 @@ public class RomanCalculator {
 
     private int buildRomanNumberAndDecrementRemainingValue(StringBuilder result, int base10ValueBeingProcessed, int remainingTotal) {
         Character romanCharacterBeingUsed = findRomanNumberFromBase10Value(base10ValueBeingProcessed);
-        if (isShortByOne(base10ValueBeingProcessed, remainingTotal)) {
-            buildTheRunt(result, romanCharacterBeingUsed);
-            return 0;
-        } else {
-            buildRomanNumber(result, remainingTotal / base10ValueBeingProcessed, romanCharacterBeingUsed);
-        }
+        buildRomanNumber(result, remainingTotal / base10ValueBeingProcessed, romanCharacterBeingUsed);
         return remainingTotal % base10ValueBeingProcessed;
     }
 
