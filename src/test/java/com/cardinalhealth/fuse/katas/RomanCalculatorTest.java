@@ -49,6 +49,21 @@ public class RomanCalculatorTest {
         assertRomanCalculatorAddition("V", "V", "X");
     }
 
+    @Test
+    public void X_plus_X() throws Exception {
+        assertRomanCalculatorAddition("X", "X", "XX");
+    }
+
+    @Test
+    public void XV_plus_X() throws Exception {
+        assertRomanCalculatorAddition("XV", "X", "XXV");
+    }
+
+    @Test
+    public void XX_plus_XXX() throws Exception {
+        assertRomanCalculatorAddition("XX", "XXX", "L");
+    }
+
     private void assertRomanCalculatorAddition(String firstRomanNumber, String secondRomanNumber, String expectedRomanNumberResult) {
         subject.enter(firstRomanNumber);
         subject.enter(secondRomanNumber);
