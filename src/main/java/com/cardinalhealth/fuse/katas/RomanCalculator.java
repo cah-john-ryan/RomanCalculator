@@ -8,8 +8,7 @@ import java.util.List;
 
 public class RomanCalculator {
     List<String> romanNumbersEntered;
-    BidiMap<Character, Integer> romanNumberMap;
-
+    BidiMap<Character, Integer> romanNumberToBase10Map;
 
     public RomanCalculator() {
         romanNumbersEntered = new ArrayList<>();
@@ -17,10 +16,10 @@ public class RomanCalculator {
     }
 
     private void setupRomanNumberHashMap() {
-        romanNumberMap = new DualHashBidiMap( );
-        romanNumberMap.put('I', 1);
-        romanNumberMap.put('V', 5);
-        romanNumberMap.put('X', 10);
+        romanNumberToBase10Map = new DualHashBidiMap( );
+        romanNumberToBase10Map.put('I', 1);
+        romanNumberToBase10Map.put('V', 5);
+        romanNumberToBase10Map.put('X', 10);
     }
 
     public void enter(String romanNumberEntered) {
@@ -43,25 +42,28 @@ public class RomanCalculator {
     private int getDecimalValue(String romanNumberEntered) {
         int totalValue = 0;
         for (int x = 0; x < romanNumberEntered.length(); x++) {
-            totalValue += romanNumberMap.get(romanNumberEntered.charAt(x));
+            totalValue += romanNumberToBase10Map.get(romanNumberEntered.charAt(x));
         }
         return totalValue;
     }
 
-    private String getRomanNumberValue(int totalDecimalValue) {
+    private String getRomanNumberValue(int totalValue) {
         StringBuilder result = new StringBuilder();
-        int totalDecimalValueRemaining = totalDecimalValue;
-        buildRomanNumber(result, totalDecimalValueRemaining / 10, 10);
-        totalDecimalValueRemaining = totalDecimalValueRemaining % 10;
-        buildRomanNumber(result, totalDecimalValueRemaining / 5, 5);
-        totalDecimalValueRemaining = totalDecimalValueRemaining % 5;
-        buildRomanNumber(result, totalDecimalValueRemaining, 1);
+        int remainingValue = totalValue;
+        remainingValue = buildRomanNumberAndDecrementRemainingValue(result, 10, remainingValue);
+        remainingValue = buildRomanNumberAndDecrementRemainingValue(result, 5, remainingValue);
+        buildRomanNumber(result, remainingValue, 1);
         return result.toString();
     }
 
-    private void buildRomanNumber(StringBuilder result, int numberOfFives, int decimalNumberBeingProcessed) {
+    private int buildRomanNumberAndDecrementRemainingValue(StringBuilder result, int base10ValueBeingProcessed, int remainingTotal) {
+        buildRomanNumber(result, remainingTotal / base10ValueBeingProcessed, base10ValueBeingProcessed);
+        return remainingTotal % base10ValueBeingProcessed;
+    }
+
+    private void buildRomanNumber(StringBuilder result, int numberOfFives, int base10ValueBeingProcessed) {
         for (int x = 0; x < numberOfFives; x++) {
-            result.append(romanNumberMap.inverseBidiMap().get(decimalNumberBeingProcessed).toString());
+            result.append(romanNumberToBase10Map.inverseBidiMap().get(base10ValueBeingProcessed).toString());
         }
     }
 }
