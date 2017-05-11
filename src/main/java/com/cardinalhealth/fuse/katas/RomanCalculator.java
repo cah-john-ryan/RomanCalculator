@@ -59,52 +59,61 @@ public class RomanCalculator {
     }
 
     private String getRomanNumberValue(int totalValue) {
-        StringBuilder result = new StringBuilder();
-        int remainingValue = totalValue;
-        remainingValue = buildRomanNumberAndDecrementRemainingValue(result, 50, remainingValue);
-        remainingValue = buildRomanNumberAndDecrementRemainingValue(result, 10, remainingValue);
-        remainingValue = buildRomanNumberAndDecrementRemainingValue(result, 5, remainingValue);
-        buildRomanNumber(result, remainingValue, 'I');
-        return result.toString();
+        StringBuilder romanNumberStringBuilder = new StringBuilder();
+        int remainingTotal = totalValue;
+        remainingTotal = buildRomanNumberAndDecrementRemainingValue(romanNumberStringBuilder, 50, remainingTotal);
+        remainingTotal = buildRomanNumberAndDecrementRemainingValue(romanNumberStringBuilder, 10, remainingTotal);
+        remainingTotal = buildRomanNumberAndDecrementRemainingValue(romanNumberStringBuilder, 5, remainingTotal);
+        buildRomanNumber(romanNumberStringBuilder, remainingTotal, 'I');
+        return romanNumberStringBuilder.toString();
     }
 
-    private int buildRomanNumberAndDecrementRemainingValue(StringBuilder result, int base10ValueBeingProcessed, int remainingTotal) {
+    private int buildRomanNumberAndDecrementRemainingValue(StringBuilder romanNumberStringBuilder, int base10ValueBeingProcessed, int remainingTotal) {
         Character romanCharacterBeingUsed = findRomanNumberFromBase10Value(base10ValueBeingProcessed);
         if (remainingTotal >= base10ValueBeingProcessed) {
-            buildRomanNumber(result, remainingTotal / base10ValueBeingProcessed, romanCharacterBeingUsed);
+            buildRomanNumber(romanNumberStringBuilder, remainingTotal / base10ValueBeingProcessed, romanCharacterBeingUsed);
         } else {
-            for (int childRomanNumberDecimalValue : getChildRomanNumberValues(base10ValueBeingProcessed)) {
-                if (isOneAwayFromSteppingUp(remainingTotal, base10ValueBeingProcessed, childRomanNumberDecimalValue)) {
-                    result.append(getRomanCharsIndicatingSteppingUpSoon(findRomanNumberFromBase10Value(childRomanNumberDecimalValue), romanCharacterBeingUsed));
-                    remainingTotal = 0;
-                    break;
-                }
-            }
-
+            remainingTotal = buildPotentialShortStopRomanNumbers(romanNumberStringBuilder, base10ValueBeingProcessed, remainingTotal, romanCharacterBeingUsed);
         }
         return remainingTotal % base10ValueBeingProcessed;
+    }
+
+    private int buildPotentialShortStopRomanNumbers(StringBuilder romanNumberStringBuilder, int base10ValueBeingProcessed, int remainingTotal, Character romanCharacterBeingUsed) {
+        for (int childRomanNumberDecimalValue : getChildRomanNumberValues(base10ValueBeingProcessed)) {
+            if (isAShortStop(remainingTotal, base10ValueBeingProcessed, childRomanNumberDecimalValue)) {
+                remainingTotal = buildShortStopRomanNumber(romanNumberStringBuilder, romanCharacterBeingUsed, childRomanNumberDecimalValue);
+                break;
+            }
+        }
+        return remainingTotal;
+    }
+
+    private int buildShortStopRomanNumber(StringBuilder romanNumberStringBuilder, Character romanCharacterBeingUsed, int childRomanNumberDecimalValue) {
+        int remainingTotal;
+        romanNumberStringBuilder.append(getShortStopFormat(findRomanNumberFromBase10Value(childRomanNumberDecimalValue), romanCharacterBeingUsed));
+        remainingTotal = 0;
+        return remainingTotal;
     }
 
     private Integer[] getChildRomanNumberValues(int base10ValueBeingProcessed) {
         return Arrays.stream(romanNumberDecimalValuesArray).filter(childRomanNumberDecimalValue -> childRomanNumberDecimalValue < base10ValueBeingProcessed).toArray(Integer[]::new);
     }
 
-    private boolean isOneAwayFromSteppingUp(int remainingTotal, int base10ValueBeingProcessed, int childRomanNumberDecimalValue) {
+    private boolean isAShortStop(int remainingTotal, int base10ValueBeingProcessed, int childRomanNumberDecimalValue) {
         return (remainingTotal == base10ValueBeingProcessed - childRomanNumberDecimalValue) && (base10ValueBeingProcessed - childRomanNumberDecimalValue != childRomanNumberDecimalValue);
     }
 
-    private String getRomanCharsIndicatingSteppingUpSoon(Character childRomanNumber, Character romanCharacterBeingUsed) {
+    private String getShortStopFormat(Character childRomanNumber, Character romanCharacterBeingUsed) {
         return new StringBuilder().append(childRomanNumber).append(romanCharacterBeingUsed).toString();
     }
 
-    private void buildRomanNumber(StringBuilder result, int howManyToAppend, Character romanCharacterBeingUsed) {
-
-        appendRomanCharacterRepeatedly(result, howManyToAppend, romanCharacterBeingUsed);
+    private void buildRomanNumber(StringBuilder romanNumberStringBuilder, int howManyToAppend, Character romanCharacterBeingUsed) {
+        appendRomanCharacterRepeatedly(romanNumberStringBuilder, howManyToAppend, romanCharacterBeingUsed);
     }
 
-    private void appendRomanCharacterRepeatedly(StringBuilder result, int howManyToAppend, Character romanCharacterBeingUsed) {
+    private void appendRomanCharacterRepeatedly(StringBuilder romanNumberStringBuilder, int howManyToAppend, Character romanCharacterBeingUsed) {
         for (int x = 0; x < howManyToAppend; x++) {
-            result.append(romanCharacterBeingUsed);
+            romanNumberStringBuilder.append(romanCharacterBeingUsed);
         }
     }
 
