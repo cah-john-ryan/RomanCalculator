@@ -72,10 +72,10 @@ public class RomanCalculator {
         Character romanCharacterBeingUsed = findRomanNumberFromBase10Value(base10ValueBeingProcessed);
         if (remainingTotal >= base10ValueBeingProcessed) {
             buildRomanNumber(romanNumberStringBuilder, remainingTotal / base10ValueBeingProcessed, romanCharacterBeingUsed);
-        } else {
-            remainingTotal = buildPotentialShortStopRomanNumbers(romanNumberStringBuilder, base10ValueBeingProcessed, remainingTotal, romanCharacterBeingUsed);
+            remainingTotal = remainingTotal % base10ValueBeingProcessed;
         }
-        return remainingTotal % base10ValueBeingProcessed;
+        remainingTotal = buildPotentialShortStopRomanNumbers(romanNumberStringBuilder, base10ValueBeingProcessed, remainingTotal, romanCharacterBeingUsed);
+        return remainingTotal;
     }
 
     private int buildPotentialShortStopRomanNumbers(StringBuilder romanNumberStringBuilder, int base10ValueBeingProcessed, int remainingTotal, Character romanCharacterBeingUsed) {
@@ -95,6 +95,10 @@ public class RomanCalculator {
         return remainingTotal;
     }
 
+    private void buildRomanNumber(StringBuilder romanNumberStringBuilder, int howManyToAppend, Character romanCharacterBeingUsed) {
+        appendRomanCharacterRepeatedly(romanNumberStringBuilder, howManyToAppend, romanCharacterBeingUsed);
+    }
+
     private Integer[] getChildRomanNumberValues(int base10ValueBeingProcessed) {
         return Arrays.stream(romanNumberDecimalValuesArray).filter(childRomanNumberDecimalValue -> childRomanNumberDecimalValue < base10ValueBeingProcessed).toArray(Integer[]::new);
     }
@@ -105,10 +109,6 @@ public class RomanCalculator {
 
     private String getShortStopFormat(Character childRomanNumber, Character romanCharacterBeingUsed) {
         return new StringBuilder().append(childRomanNumber).append(romanCharacterBeingUsed).toString();
-    }
-
-    private void buildRomanNumber(StringBuilder romanNumberStringBuilder, int howManyToAppend, Character romanCharacterBeingUsed) {
-        appendRomanCharacterRepeatedly(romanNumberStringBuilder, howManyToAppend, romanCharacterBeingUsed);
     }
 
     private void appendRomanCharacterRepeatedly(StringBuilder romanNumberStringBuilder, int howManyToAppend, Character romanCharacterBeingUsed) {
