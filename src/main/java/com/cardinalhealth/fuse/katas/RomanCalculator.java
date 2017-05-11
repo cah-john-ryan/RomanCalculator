@@ -3,19 +3,23 @@ package com.cardinalhealth.fuse.katas;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
+import javax.print.DocFlavor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RomanCalculator {
     List<String> romanNumbersEntered;
     BidiMap<Character, Integer> romanNumberToBase10Map;
+    Integer[] romanNumberDecimalValuesArray = {1, 5, 10, 50, 100, 500, 1000};
+    String romanNumberSymbols = "IVXLCDM";
 
     public RomanCalculator() {
         romanNumbersEntered = new ArrayList<>();
-        setupRomanNumberHashMap();
+        setupRomanNumberBidiMap();
     }
 
-    private void setupRomanNumberHashMap() {
+    private void setupRomanNumberBidiMap() {
         romanNumberToBase10Map = new DualHashBidiMap();
         romanNumberToBase10Map.put('I', 1);
         romanNumberToBase10Map.put('V', 5);
@@ -68,8 +72,44 @@ public class RomanCalculator {
 
     private int buildRomanNumberAndDecrementRemainingValue(StringBuilder result, int base10ValueBeingProcessed, int remainingTotal) {
         Character romanCharacterBeingUsed = findRomanNumberFromBase10Value(base10ValueBeingProcessed);
-        buildRomanNumber(result, remainingTotal / base10ValueBeingProcessed, romanCharacterBeingUsed);
+        if(remainingTotal >= base10ValueBeingProcessed) {
+            buildRomanNumber(result, remainingTotal / base10ValueBeingProcessed, romanCharacterBeingUsed);
+        } else {
+            for(int childRomanNumberDecimalValue: getChildRomanNumberValues(base10ValueBeingProcessed)) {
+                if (isOneAwayFromSteppingUp(remainingTotal, base10ValueBeingProcessed, childRomanNumberDecimalValue)) {
+                    result.append(getRomanCharsIndicatingSteppingUpSoon(findRomanNumberFromBase10Value(childRomanNumberDecimalValue), romanCharacterBeingUsed));
+                    remainingTotal = 0;
+                    break;
+                }
+            }
+
+        }
         return remainingTotal % base10ValueBeingProcessed;
+    }
+
+    private Integer[] getChildRomanNumberValues(int base10ValueBeingProcessed) {
+        return Arrays.stream(romanNumberDecimalValuesArray).filter(childRomanNumberDecimalValue -> childRomanNumberDecimalValue < base10ValueBeingProcessed).toArray(Integer[]::new);
+    }
+
+    private boolean isOneAwayFromSteppingUp(int remainingTotal, int base10ValueBeingProcessed, int childRomanNumberDecimalValue) {
+        return (remainingTotal == base10ValueBeingProcessed - childRomanNumberDecimalValue) && (base10ValueBeingProcessed - childRomanNumberDecimalValue != childRomanNumberDecimalValue);
+    }
+
+    private String getRomanCharsIndicatingSteppingUpSoon(Character childRomanNumber, Character romanCharacterBeingUsed) {
+        return new StringBuilder().append(childRomanNumber).append(romanCharacterBeingUsed).toString();
+    }
+
+    private int getParentRomanNumeralDecimalValue(int base10ValueBeingProcessed) {
+        for (int x = 0; x < romanNumberDecimalValuesArray.length; x++) {
+            if (romanNumberDecimalValuesArray[x] == base10ValueBeingProcessed) {
+                return romanNumberDecimalValuesArray[x + 1];
+            }
+        }
+        return 0;
+    }
+
+    private Character getParentRomanNumeral(Character romanCharacterBeingUsed) {
+        return romanNumberSymbols.charAt(romanNumberSymbols.indexOf(romanCharacterBeingUsed) + 1);
     }
 
     private void buildRomanNumber(StringBuilder result, int howManyToAppend, Character romanCharacterBeingUsed) {
@@ -77,13 +117,13 @@ public class RomanCalculator {
         appendRomanCharacterRepeatedly(result, howManyToAppend, romanCharacterBeingUsed);
     }
 
-    private Character findRomanNumberFromBase10Value(int base10ValueBeingProcessed) {
-        return romanNumberToBase10Map.inverseBidiMap().get(base10ValueBeingProcessed);
-    }
-
     private void appendRomanCharacterRepeatedly(StringBuilder result, int howManyToAppend, Character romanCharacterBeingUsed) {
         for (int x = 0; x < howManyToAppend; x++) {
             result.append(romanCharacterBeingUsed);
         }
+    }
+
+    private Character findRomanNumberFromBase10Value(int base10ValueBeingProcessed) {
+        return romanNumberToBase10Map.inverseBidiMap().get(base10ValueBeingProcessed);
     }
 }

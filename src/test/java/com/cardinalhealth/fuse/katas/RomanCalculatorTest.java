@@ -40,6 +40,14 @@ public class RomanCalculatorTest {
         assertRomanCalculatorAddition("XLIV", "VI", "L");
     }
 
+    @Test
+    public void lesserBeforeBiggerReturned() throws Exception {
+        assertRomanCalculatorAddition("V", "IV", "IX");
+        assertRomanCalculatorAddition("XX", "XX", "XL");
+        assertRomanCalculatorAddition("XXV", "XXIV", "IL");
+        assertRomanCalculatorAddition("XX","IX", "XXIX");
+    }
+
     private void assertRomanCalculatorAddition(String firstRomanNumber, String secondRomanNumber, String expectedRomanNumberResult) {
         subject.enter(firstRomanNumber);
         subject.enter(secondRomanNumber);
