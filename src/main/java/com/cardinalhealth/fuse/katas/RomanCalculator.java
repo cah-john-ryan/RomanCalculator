@@ -3,7 +3,6 @@ package com.cardinalhealth.fuse.katas;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
-import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,7 +11,6 @@ public class RomanCalculator {
     List<String> romanNumbersEntered;
     BidiMap<Character, Integer> romanNumberToBase10Map;
     Integer[] romanNumberDecimalValuesArray = {1, 5, 10, 50, 100, 500, 1000};
-    String romanNumberSymbols = "IVXLCDM";
 
     public RomanCalculator() {
         romanNumbersEntered = new ArrayList<>();
@@ -72,10 +70,10 @@ public class RomanCalculator {
 
     private int buildRomanNumberAndDecrementRemainingValue(StringBuilder result, int base10ValueBeingProcessed, int remainingTotal) {
         Character romanCharacterBeingUsed = findRomanNumberFromBase10Value(base10ValueBeingProcessed);
-        if(remainingTotal >= base10ValueBeingProcessed) {
+        if (remainingTotal >= base10ValueBeingProcessed) {
             buildRomanNumber(result, remainingTotal / base10ValueBeingProcessed, romanCharacterBeingUsed);
         } else {
-            for(int childRomanNumberDecimalValue: getChildRomanNumberValues(base10ValueBeingProcessed)) {
+            for (int childRomanNumberDecimalValue : getChildRomanNumberValues(base10ValueBeingProcessed)) {
                 if (isOneAwayFromSteppingUp(remainingTotal, base10ValueBeingProcessed, childRomanNumberDecimalValue)) {
                     result.append(getRomanCharsIndicatingSteppingUpSoon(findRomanNumberFromBase10Value(childRomanNumberDecimalValue), romanCharacterBeingUsed));
                     remainingTotal = 0;
@@ -97,19 +95,6 @@ public class RomanCalculator {
 
     private String getRomanCharsIndicatingSteppingUpSoon(Character childRomanNumber, Character romanCharacterBeingUsed) {
         return new StringBuilder().append(childRomanNumber).append(romanCharacterBeingUsed).toString();
-    }
-
-    private int getParentRomanNumeralDecimalValue(int base10ValueBeingProcessed) {
-        for (int x = 0; x < romanNumberDecimalValuesArray.length; x++) {
-            if (romanNumberDecimalValuesArray[x] == base10ValueBeingProcessed) {
-                return romanNumberDecimalValuesArray[x + 1];
-            }
-        }
-        return 0;
-    }
-
-    private Character getParentRomanNumeral(Character romanCharacterBeingUsed) {
-        return romanNumberSymbols.charAt(romanNumberSymbols.indexOf(romanCharacterBeingUsed) + 1);
     }
 
     private void buildRomanNumber(StringBuilder result, int howManyToAppend, Character romanCharacterBeingUsed) {
