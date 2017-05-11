@@ -30,6 +30,9 @@ public class RomanCalculatorTest {
         assertRomanCalculatorAddition("X", "X", "XX");
         assertRomanCalculatorAddition("XV", "X", "XXV");
         assertRomanCalculatorAddition("XX", "XXX", "L");
+        assertRomanCalculatorAddition("L", "L", "C");
+        assertRomanCalculatorAddition("CC", "CCC", "D");
+        assertRomanCalculatorAddition("D", "D", "M");
     }
 
     @Test
@@ -38,15 +41,19 @@ public class RomanCalculatorTest {
         assertRomanCalculatorAddition("XL", "X", "L");
         assertRomanCalculatorAddition("XXIV", "I", "XXV");
         assertRomanCalculatorAddition("XLIV", "VI", "L");
+        assertRomanCalculatorAddition("XC", "CX", "CC");
+        assertRomanCalculatorAddition("C", "CD", "D");
+        assertRomanCalculatorAddition("DCCCCXC", "X", "M");
     }
 
     @Test
     public void lesserBeforeBiggerReturned() throws Exception {
-        assertRomanCalculatorAddition("V", "IV", "IX");
-        assertRomanCalculatorAddition("XX", "XX", "XL");
-        assertRomanCalculatorAddition("XXV", "XXIV", "IL");
-        assertRomanCalculatorAddition("XX","IX", "XXIX");
-        assertRomanCalculatorAddition("XI","III", "XIV");
+//        assertRomanCalculatorAddition("V", "IV", "IX");
+//        assertRomanCalculatorAddition("XX", "XX", "XL");
+//        assertRomanCalculatorAddition("XXV", "XXIV", "IL");
+//        assertRomanCalculatorAddition("XX","IX", "XXIX");
+//        assertRomanCalculatorAddition("XI","III", "XIV");
+        assertRomanCalculatorAddition("CD","LXXXXIV", "CDLXXXXIV");
     }
 
     private void assertRomanCalculatorAddition(String firstRomanNumber, String secondRomanNumber, String expectedRomanNumberResult) {

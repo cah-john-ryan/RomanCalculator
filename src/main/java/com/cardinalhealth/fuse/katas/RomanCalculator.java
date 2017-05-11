@@ -23,6 +23,9 @@ public class RomanCalculator {
         romanNumberToBase10Map.put('V', 5);
         romanNumberToBase10Map.put('X', 10);
         romanNumberToBase10Map.put('L', 50);
+        romanNumberToBase10Map.put('C', 100);
+        romanNumberToBase10Map.put('D', 500);
+        romanNumberToBase10Map.put('M', 1000);
     }
 
     public void enter(String romanNumberEntered) {
@@ -61,6 +64,9 @@ public class RomanCalculator {
     private String getRomanNumberValue(int totalValue) {
         StringBuilder romanNumberStringBuilder = new StringBuilder();
         int remainingTotal = totalValue;
+        remainingTotal = buildRomanNumberAndDecrementRemainingValue(romanNumberStringBuilder, 1000, remainingTotal);
+        remainingTotal = buildRomanNumberAndDecrementRemainingValue(romanNumberStringBuilder, 500, remainingTotal);
+        remainingTotal = buildRomanNumberAndDecrementRemainingValue(romanNumberStringBuilder, 100, remainingTotal);
         remainingTotal = buildRomanNumberAndDecrementRemainingValue(romanNumberStringBuilder, 50, remainingTotal);
         remainingTotal = buildRomanNumberAndDecrementRemainingValue(romanNumberStringBuilder, 10, remainingTotal);
         remainingTotal = buildRomanNumberAndDecrementRemainingValue(romanNumberStringBuilder, 5, remainingTotal);
