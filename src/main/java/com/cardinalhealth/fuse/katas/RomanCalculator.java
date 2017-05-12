@@ -11,7 +11,7 @@ class RomanCalculator {
     private List<String> romanNumbersEntered;
     private BidiMap<Character, Integer> romanNumberAndBase10Map;
     private Integer[] romanNumberDecimalValuesProgression = {1000, 500, 100, 50, 10, 5, 1};
-    private Character[] romanNumberDecimalValueProgression = {'M','D','C','L','X','V','I'};
+    private Character[] romanNumberDecimalValueProgression = {'M', 'D', 'C', 'L', 'X', 'V', 'I'};
 
     RomanCalculator() {
         romanNumbersEntered = new ArrayList<>();
@@ -70,21 +70,18 @@ class RomanCalculator {
     private int buildRepeatedRomanCharacters(StringBuilder romanNumberStringBuilder, int romanNumberDecimalValue, int remainingTotal) {
         Character romanCharacterBeingUsed = findRomanNumberFromBase10Value(romanNumberDecimalValue);
         if (remainingTotal >= romanNumberDecimalValue) {
-            buildRepeatedRomanCharacters(romanNumberStringBuilder, remainingTotal / romanNumberDecimalValue, romanCharacterBeingUsed);
-            remainingTotal = remainingTotal % romanNumberDecimalValue;
+            remainingTotal = buildRepeatedRomanCharacters(romanNumberStringBuilder, remainingTotal, romanNumberDecimalValue, romanCharacterBeingUsed);
         }
         remainingTotal = buildPotentialShortStopRomanCharacters(romanNumberStringBuilder, romanNumberDecimalValue, remainingTotal);
         return remainingTotal;
     }
 
-    private void buildRepeatedRomanCharacters(StringBuilder romanNumberStringBuilder, int howManyToAppend, Character romanCharacterBeingUsed) {
-        appendRomanCharacterRepeatedly(romanNumberStringBuilder, howManyToAppend, romanCharacterBeingUsed);
-    }
-
-    private void appendRomanCharacterRepeatedly(StringBuilder romanNumberStringBuilder, int howManyToAppend, Character romanCharacterBeingUsed) {
+    private int buildRepeatedRomanCharacters(StringBuilder romanNumberStringBuilder, int remainingTotal, int romanNumberDecimalValue, Character romanCharacterBeingUsed) {
+        int howManyToAppend = remainingTotal / romanNumberDecimalValue;
         for (int x = 0; x < howManyToAppend; x++) {
             romanNumberStringBuilder.append(romanCharacterBeingUsed);
         }
+        return remainingTotal % romanNumberDecimalValue;
     }
 
     private int buildPotentialShortStopRomanCharacters(StringBuilder romanNumberStringBuilder, int romanNumberDecimalValue, int remainingTotal) {
