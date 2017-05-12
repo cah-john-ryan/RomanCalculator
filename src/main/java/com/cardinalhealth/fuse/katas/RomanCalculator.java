@@ -72,7 +72,7 @@ class RomanCalculator {
         if (remainingTotal >= romanNumberDecimalValue) {
             remainingTotal = buildRepeatedRomanCharacters(romanNumberStringBuilder, remainingTotal, romanNumberDecimalValue, romanCharacterBeingUsed);
         }
-        remainingTotal = buildPotentialShortStopRomanCharacters(romanNumberStringBuilder, romanNumberDecimalValue, remainingTotal);
+        remainingTotal = buildPotentialLesserRomanCharacters(romanNumberStringBuilder, romanNumberDecimalValue, remainingTotal);
         return remainingTotal;
     }
 
@@ -84,18 +84,18 @@ class RomanCalculator {
         return remainingTotal % romanNumberDecimalValue;
     }
 
-    private int buildPotentialShortStopRomanCharacters(StringBuilder romanNumberStringBuilder, int romanNumberDecimalValue, int remainingTotal) {
-        for (int childRomanNumberDecimalValue : getChildRomanNumberValues(romanNumberDecimalValue)) {
-            if (isAShortStop(remainingTotal, romanNumberDecimalValue, childRomanNumberDecimalValue)) {
-                remainingTotal -= buildShortStopRomanCharacter(romanNumberStringBuilder, romanNumberDecimalValue, childRomanNumberDecimalValue);
+    private int buildPotentialLesserRomanCharacters(StringBuilder romanNumberStringBuilder, int romanNumberDecimalValue, int remainingTotal) {
+        for (int lesserRomanNumberDecimalValue : getChildRomanNumberValues(romanNumberDecimalValue)) {
+            if (shouldLesserRomanCharacterBeUsed(remainingTotal, romanNumberDecimalValue, lesserRomanNumberDecimalValue)) {
+                remainingTotal -= buildLesserRomanCharacter(romanNumberStringBuilder, romanNumberDecimalValue, lesserRomanNumberDecimalValue);
                 break;
             }
         }
         return remainingTotal;
     }
 
-    private int buildShortStopRomanCharacter(StringBuilder romanNumberStringBuilder, int romanNumberDecimalValue, int childRomanNumberDecimalValue) {
-        romanNumberStringBuilder.append(getShortStopFormat(childRomanNumberDecimalValue, romanNumberDecimalValue));
+    private int buildLesserRomanCharacter(StringBuilder romanNumberStringBuilder, int romanNumberDecimalValue, int childRomanNumberDecimalValue) {
+        romanNumberStringBuilder.append(getLesserBeforeBiggerFormat(childRomanNumberDecimalValue, romanNumberDecimalValue));
         return romanNumberDecimalValue - childRomanNumberDecimalValue;
     }
 
@@ -105,11 +105,11 @@ class RomanCalculator {
                 .toArray(Integer[]::new);
     }
 
-    private boolean isAShortStop(int remainingTotal, int romanNumberDecimalValue, int childRomanNumberDecimalValue) {
+    private boolean shouldLesserRomanCharacterBeUsed(int remainingTotal, int romanNumberDecimalValue, int childRomanNumberDecimalValue) {
         return (remainingTotal >= romanNumberDecimalValue - childRomanNumberDecimalValue) && (romanNumberDecimalValue - childRomanNumberDecimalValue != childRomanNumberDecimalValue);
     }
 
-    private String getShortStopFormat(int childRomanNumberDecimalValue, int romanNumberDecimalValue) {
+    private String getLesserBeforeBiggerFormat(int childRomanNumberDecimalValue, int romanNumberDecimalValue) {
         return String.valueOf(findRomanNumberFromBase10Value(childRomanNumberDecimalValue)) +
                 findRomanNumberFromBase10Value(romanNumberDecimalValue);
     }
