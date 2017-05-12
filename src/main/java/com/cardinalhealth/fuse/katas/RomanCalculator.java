@@ -11,6 +11,7 @@ class RomanCalculator {
     private List<String> romanNumbersEntered;
     private BidiMap<Character, Integer> romanNumberAndBase10Map;
     private Integer[] romanNumberDecimalValuesProgression = {1000, 500, 100, 50, 10, 5, 1};
+    private Character[] romanNumberDecimalValueProgression = {'M','D','C','L','X','V','I'};
 
     RomanCalculator() {
         romanNumbersEntered = new ArrayList<>();
@@ -19,13 +20,9 @@ class RomanCalculator {
 
     private void setupRomanNumberBidiMap() {
         romanNumberAndBase10Map = new DualHashBidiMap<>();
-        romanNumberAndBase10Map.put('I', 1);
-        romanNumberAndBase10Map.put('V', 5);
-        romanNumberAndBase10Map.put('X', 10);
-        romanNumberAndBase10Map.put('L', 50);
-        romanNumberAndBase10Map.put('C', 100);
-        romanNumberAndBase10Map.put('D', 500);
-        romanNumberAndBase10Map.put('M', 1000);
+        for (int x = 0; x < romanNumberDecimalValueProgression.length; x++) {
+            romanNumberAndBase10Map.put(romanNumberDecimalValueProgression[x], romanNumberDecimalValuesProgression[x]);
+        }
     }
 
     void enter(String romanNumberEntered) {
