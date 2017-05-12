@@ -48,12 +48,12 @@ public class RomanCalculatorTest {
 
     @Test
     public void lesserBeforeBiggerReturned() throws Exception {
-//        assertRomanCalculatorAddition("V", "IV", "IX");
-//        assertRomanCalculatorAddition("XX", "XX", "XL");
-//        assertRomanCalculatorAddition("XXV", "XXIV", "IL");
-//        assertRomanCalculatorAddition("XX","IX", "XXIX");
-//        assertRomanCalculatorAddition("XI","III", "XIV");
-        assertRomanCalculatorAddition("CD","LXXXXIV", "CDLXXXXIV");
+        assertRomanCalculatorAddition("V", "IV", "IX");
+        assertRomanCalculatorAddition("XX", "XX", "XL");
+        assertRomanCalculatorAddition("XXV", "XXIV", "XLIX");
+        assertRomanCalculatorAddition("XX", "IX", "XXIX");
+        assertRomanCalculatorAddition("XI", "III", "XIV");
+        assertRomanCalculatorAddition("CD","LXXXXIV", "CDXCIV");
     }
 
     private void assertRomanCalculatorAddition(String firstRomanNumber, String secondRomanNumber, String expectedRomanNumberResult) {
