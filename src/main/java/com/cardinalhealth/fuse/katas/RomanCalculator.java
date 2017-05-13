@@ -18,13 +18,6 @@ class RomanCalculator {
         setupRomanNumberBidiMap();
     }
 
-    private void setupRomanNumberBidiMap() {
-        romanNumberAndBase10Map = new DualHashBidiMap<>();
-        for (int x = 0; x < romanNumberDecimalValueProgression.length; x++) {
-            romanNumberAndBase10Map.put(romanNumberDecimalValueProgression[x], romanNumberDecimalValuesProgression[x]);
-        }
-    }
-
     void enter(String romanNumberEntered) {
         romanNumbersEntered.add(romanNumberEntered);
     }
@@ -33,6 +26,13 @@ class RomanCalculator {
         int totalDecimalValue = getDecimalValueByAddition();
         romanNumbersEntered.clear();
         return getRomanNumberValue(totalDecimalValue);
+    }
+
+    private void setupRomanNumberBidiMap() {
+        romanNumberAndBase10Map = new DualHashBidiMap<>();
+        for (int x = 0; x < romanNumberDecimalValueProgression.length; x++) {
+            romanNumberAndBase10Map.put(romanNumberDecimalValueProgression[x], romanNumberDecimalValuesProgression[x]);
+        }
     }
 
     private int getDecimalValueByAddition() {
