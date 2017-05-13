@@ -3,6 +3,12 @@ package com.cardinalhealth.fuse.katas;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -53,7 +59,18 @@ public class RomanCalculatorTest {
         assertRomanCalculatorAddition("XXV", "XXIV", "XLIX");
         assertRomanCalculatorAddition("XX", "IX", "XXIX");
         assertRomanCalculatorAddition("XI", "III", "XIV");
-        assertRomanCalculatorAddition("CD","LXXXXIV", "CDXCIV");
+        assertRomanCalculatorAddition("CD", "LXXXXIV", "CDXCIV");
+    }
+
+    @Test
+    public void theWholeKitchenSink() throws Exception {
+        URL resource = getClass().getClassLoader().getResource("RomanNumerals-OneThousandPermutations.csv");
+        Path path = Paths.get(resource.toURI());
+
+        Files.lines(path, StandardCharsets.UTF_8).forEach(record -> {
+            String[] romanNumbersToTest = record.split(",");
+            assertRomanCalculatorAddition(romanNumbersToTest[0], romanNumbersToTest[1], romanNumbersToTest[2]);
+        });
     }
 
     private void assertRomanCalculatorAddition(String firstRomanNumber, String secondRomanNumber, String expectedRomanNumberResult) {
